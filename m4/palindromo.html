@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Palindromos</title>
+</head>
+<body>
+</body>
+<script>
+    let a = String(prompt("Verificador de palindromo\nInsira uma palavra"));
+    a.trim(a);
+
+    //Inverte a string
+    b = a.split('').reverse().join('');
+
+    if(a == b){alert('A palavra É um palindromo');}
+    else{alert('A palavra NÃO é um palíndromo')}
+</script>
+</html>
