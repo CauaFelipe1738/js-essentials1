@@ -71,7 +71,7 @@
         if (n <= 1) return false;
         if (n <= 3) return true;
 
-        // checar divisores até sqrt(n)
+        // checar divisores até sqrt(n), verificando se é primo
         const limit = Math.floor(Math.sqrt(n));
         for (let i = 2; i <= limit; i++) {
             if (n % i === 0) {
@@ -116,11 +116,11 @@
 {
     function average(scores) {
     if (scores.length === 0) return 0; // ou undefined dependendo do design
-    let sum = 0;
-    for (let i = 0; i < scores.length; i++) {
-        sum += scores[i];
-    }
-    return sum / scores.length;
+        let sum = 0;
+        for (let i = 0; i < scores.length; i++) {
+            sum += scores[i]; //faz a soma das notas do parametro scores
+        }
+            return sum / scores.length;
     }
 
     console.log(average([8, 7.5, 9, 10])); // (8 + 7.5 + 9 + 10) / 4 = 8.625
@@ -131,7 +131,7 @@
         return `${firstName} ${lastName}`;
     }
 
-    console.log(fullName("Maria", "Silva")); // Maria Silva
+    console.log(fullName("Full", "Stack")); // Maria Silva
 }
 
 {
@@ -140,14 +140,14 @@
     }
 
     function quadruple(n) {
-    return double(double(n));
+    return double(double(n)); //quadruple duplica o duplo
     }
 
     console.log(quadruple(3)); // 12
 }
 
 {
-    let mode = "light"; // global
+    let mode = "light";
 
     function toggleMode(mode) {
     // parâmetro 'mode' faz shadowing da global
