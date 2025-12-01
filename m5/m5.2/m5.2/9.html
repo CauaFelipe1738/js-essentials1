@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+</body>
+<script>
+    debugger;
+    // Linha 1
+    async function a() {
+    // Linha 2: O await pausa 'a' e enfileira o restante (continuação) como microtask.
+        console.log('1. Início de A');
+    // Linha 3
+        const result = await b(); // Chama b() e espera pela Promise
+    // Linha 4
+        console.log('5. Retorno de A (após await)');
+    // Linha 5
+        return result + 10;
+    // Linha 6
+    }
+    // Linha 7
+    function b() {
+    // Linha 8
+        console.log('2. Início de B');
+    // Linha 9
+        c(); // Chamada síncrona para c
+    // Linha 10
+        // Retorna uma Promise resolvida (thenable)
+        return Promise.resolve(5); 
+    // Linha 11
+    }
+    // Linha 12
+    function c() {
+    // Linha 13
+        console.log('3. Início de C');
+    // Linha 14
+        // Enfileira uma microtask, executada antes da próxima macrotask.
+        queueMicrotask(() => {
+    // Linha 15
+            console.log('4. Microtask de C executada');
+    // Linha 16
+        });
+    // Linha 17
+        console.log('3. Fim de C');
+    // Linha 18
+    }
+    // Linha 19
+    console.log('0. Antes de A');
+    // Linha 20
+    a().then(val => console.log(`6. Resultado final: ${val}`));
+    // Linha 21
+    console.log('0. Fim do script síncrono');
+
+    /*
+    Diferenças Práticas e Call Stack
+
+    //Comportamento do await
+    await é um mecanismo de pausa/continuação, não de chamada síncrona.
+
+    Quando você usa await (Linha 3), o Call Stack síncrono da função a é esvaziado, o controle é devolvido ao Event Loop, e a continuação de a (a partir da Linha 4) é enfileirada na Fila de Microtasks.
+    
+    //Step Into/Out/Over no await
+    Step Into (Passo 3): Entra em b() sincronamente.
+
+    Step Over (Passo 10): Você verá o debugger pular da Linha 3 (o await) para o fim do código síncrono (Linha 21), e só então (Passo 13) retornar para a Linha 4 na próxima microtask.
+    
+    //O Comportamento de Microtasks (queueMicrotask e Continuações async)
+    Quando o código síncrono (incluindo a, b, c) é executado (Passos 1-11), o Call Stack mostra a cadeia de chamadas: c -> b -> a -> (Global).
+    
+    Quando a microtask de c é executada (Passo 12), o Call Stack síncrono principal já foi esvaziado. O debugger mostra um Call Stack que geralmente tem apenas a função callback da microtask ((Microtask: c)), pois não foi chamada por uma função JS, mas sim pelo Event Loop.
+    
+    //Step Into/Over/Out em Microtasks:
+    Step Into/Over funcionam normalmente dentro da microtask (Passos 12-14).
+
+    Você não pode usar Step Out para sair da execução da microtask e voltar para o código síncrono anterior, porque a microtask é uma nova entrada no Call Stack (agora assíncrono), não uma chamada aninhada da execução anterior.
+    */
+</script>
+</html>
